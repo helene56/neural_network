@@ -7,3 +7,6 @@ __pycache__/
 
 # Ignore test files
 mnist_handwritten_dataset/
+
+# Ignore the plot files
+/*.png
