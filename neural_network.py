@@ -11,8 +11,10 @@ class neuralNetwork:
         self.wih = np.random.normal(0.0, pow(self.inodes, -0.5), (self.hnodes, self.inodes)) # weigh matrix between input nodes and hidden nodes
         self.who = np.random.normal(0.0, pow(self.hnodes, -0.5), (self.onodes, self.hnodes)) # weigh matrix between output nodes and hidden nodes
         # initilaze the sigmoid function
-        self.activation_function = lambda x: sp.expit(x)
+        # self.activation_function = lambda x: sp.expit(x)
 
+    def activation_function(self, x):
+        return sp.expit(x)
 
     # train the neural network
     def train(self, inputs_list, targets_list):
@@ -26,7 +28,6 @@ class neuralNetwork:
         final_inputs = np.dot(self.who, hidden_outputs)
         # signals emerging from final output layer
         final_outputs = self.activation_function(final_inputs)
-
         # error is  the (target - actual)
         output_error = targets - final_outputs
         # hidden layer error
