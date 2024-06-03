@@ -7,24 +7,42 @@ import matplotlib.pyplot as plt
 from neural_network import neuralNetwork
 
 # Load the trained model
-with open('trained_model.pkl', 'rb') as f:
+with open('trained_model_full.pkl', 'rb') as f:
     n = pickle.load(f)
 
 # testing the network
-with open("mnist_handwritten_dataset/sub_dataset/mnist_test_10.csv", 'r') as test_data_file:
+with open("mnist_handwritten_dataset/full_dataset/mnist_test.csv", 'r') as test_data_file:
     test_data_file = test_data_file.readlines()
-# get the first test record to test manually
-all_values = test_data_file[0].split(',')
-print(f"test number: {all_values[0]}")
-image_array = np.asfarray(all_values[1:]).reshape((28,28))
-plt.imshow(image_array, cmap='Greys', interpolation='None')
-# Save the plot to a file
-plt.savefig('plot.png')
-# query the network
-input_list = (np.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
-final_outputs = n.query(input_list)
-print(final_outputs)
+# # get the first test record to test manually
+# all_values = test_data_file[0].split(',')
+# print(f"test number: {all_values[0]}")
+# image_array = np.asfarray(all_values[1:]).reshape((28,28))
+# plt.imshow(image_array, cmap='Greys', interpolation='None')
+# # Save the plot to a file
+# plt.savefig('plot.png')
+# # query the network
+# input_list = (np.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
+# final_outputs = n.query(input_list)
+# print(final_outputs)
 
+# testing the neural network and keeping score
+scorecard = []
+for record in test_data_file:
+    all_values = record.split(',')
+    correct_label = int(all_values[0])
+    input_list = (np.asfarray(all_values[1:]) / 255.0 * 0.99) + 0.01
+    final_outputs = n.query(input_list)
+    network_label = np.argmax(final_outputs)
+    # print(f"correct label: {correct_label}")
+    # print(f"network label: {network_label}")
+    if network_label == correct_label:
+        scorecard.append(1)
+    else:
+        scorecard.append(0)
+
+scorecard_array = np.asarray(scorecard)
+performance = scorecard_array.sum() / scorecard_array.size
+print(f"performance of network: {performance}")
 
 # # example plot data
 # all_values = training_data_list[1].split(',') # split the first data in the list at every comma, this splits the data for the second number
